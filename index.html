@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rams Başakşehir — Resmi Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--o:#E8610A;--n:#0A1E3D;--w:#fff;--bg:#F4F5F8;--muted:#6B7A99;--brd:rgba(10,30,61,0.1);--ol:#FFF0E8}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--n);min-height:100vh}
+.hdr{background:var(--n);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;border-bottom:3px solid var(--o);position:sticky;top:0;z-index:999}
+.logo-a{display:flex;align-items:center;gap:12px}
+.logo-a img{width:46px;height:46px;object-fit:contain}
+.site-ttl{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;color:var(--w);line-height:1.2}
+.site-ttl span{display:block;font-weight:400;font-size:11px;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.nav{display:flex;list-style:none}
+.nav a{display:block;padding:0 14px;height:68px;line-height:68px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.7);text-decoration:none;cursor:pointer}
+.nav a:hover{color:var(--w);background:rgba(255,255,255,.05)}
+.nav a.act{color:var(--o);border-bottom:3px solid var(--o);margin-bottom:-3px}
+.adm-btn{background:var(--o);color:var(--w);border:none;padding:8px 20px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:6px;cursor:pointer}
+.adm-btn:hover{background:#cc540a}
+.pg{display:none}.pg.act{display:block}
+.loading-overlay{position:fixed;inset:0;background:rgba(10,30,61,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
+.loading-overlay.hidden{display:none}
+.spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);border-top-color:var(--o);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-txt{font-family:'Barlow Condensed',sans-serif;font-size:16px;color:rgba(255,255,255,.7);letter-spacing:1px;text-align:center}
+.hero{background:var(--n);padding:3rem 2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;border:40px solid rgba(232,97,10,.12);pointer-events:none}
+.hero-tag{display:inline-block;background:var(--o);color:var(--w);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;margin-bottom:12px}
+.hero-ttl{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;color:var(--w);line-height:1.1;max-width:560px;margin-bottom:10px}
+.hero-meta{font-size:13px;color:rgba(255,255,255,.5)}
+.hero-meta strong{color:var(--o)}
+.layout{max-width:1140px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:1fr 300px;gap:2rem}
+.sec-lbl{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--o);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:var(--brd)}
+.pgrid{display:grid;gap:1.25rem}
+.card{background:var(--w);border:1px solid var(--brd);border-radius:10px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--o);box-shadow:0 4px 20px rgba(232,97,10,.1)}
+.card.feat{border-left:4px solid var(--o)}
+.card-in{padding:1.25rem}
+.pcat{display:inline-flex;background:var(--ol);color:var(--o);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:10px}
+.pttl{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:var(--n);line-height:1.2;margin-bottom:8px}
+.pexc{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.pftr{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--brd)}
+.pdate{font-size:12px;color:var(--muted)}
+.rdmore{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--o);background:none;border:none;cursor:pointer}
+.no-posts{text-align:center;padding:3rem;color:var(--muted);font-size:15px}
+.match-card{background:var(--w);border:1px solid var(--brd);border-radius:10px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.match-card:hover{border-color:var(--o);box-shadow:0 4px 20px rgba(232,97,10,.1)}
+.match-scorebox{background:var(--n);padding:1.5rem 1.5rem 1.25rem;text-align:center;position:relative}
+.match-scorebox::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--o)}
+.match-teams{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:.75rem}
+.team-col{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:90px}
+.team-logo-d{width:52px;height:52px;object-fit:contain}
+.team-logo-ph{width:52px;height:52px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;color:rgba(255,255,255,.6)}
+.team-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--w);text-align:center;line-height:1.2}
+.vs-badge{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--o);padding:0 8px}
+.match-info-bar{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;padding:.75rem 1.25rem;background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.06)}
+.mib{display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.55)}
+.match-body{padding:1rem 1.25rem}
+.match-excerpt{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.match-ftr{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--brd)}
+.single-w{max-width:780px;margin:2.5rem auto;padding:0 2rem}
+.back-btn{background:none;border:none;color:var(--o);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:1.5rem;display:flex;align-items:center;gap:6px}
+.single-card{background:var(--w);border:1px solid var(--brd);border-radius:12px;overflow:hidden}
+.scat{display:inline-block;background:var(--ol);color:var(--o);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:4px;margin-bottom:14px}
+.sttl{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--n);line-height:1.15;margin-bottom:10px}
+.smeta{font-size:13px;color:var(--muted);margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--brd)}
+.smeta strong{color:var(--o)}
+.sbody{font-size:15px;line-height:1.8;color:#2d3a52;white-space:pre-wrap}
+.smatch-header{background:var(--n);padding:2rem;position:relative;overflow:hidden}
+.smatch-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--o)}
+.smatch-teams{display:flex;align-items:center;justify-content:center;gap:2rem;margin-bottom:1.25rem}
+.smatch-team{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:120px}
+.smatch-logo{width:72px;height:72px;object-fit:contain}
+.smatch-logo-ph{width:72px;height:72px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:18px;color:rgba(255,255,255,.6)}
+.smatch-tname{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;color:var(--w);text-align:center}
+.smatch-vs{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--o)}
+.smatch-infobar{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;padding:1rem 1.5rem;background:rgba(0,0,0,.15)}
+.smib{display:flex;flex-direction:column;align-items:center;gap:3px}
+.smib-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.4);font-weight:600}
+.smib-val{font-size:13px;color:rgba(255,255,255,.85);font-weight:500;text-align:center}
+.smatch-content{padding:1.5rem}
+.kadro-wrap{max-width:900px;margin:2rem auto;padding:0 2rem}
+.player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;margin-top:1rem}
+.player-card{background:var(--w);border:1px solid var(--brd);border-radius:10px;padding:1.25rem;text-align:center;transition:border-color .2s}
+.player-card:hover{border-color:var(--o)}
+.player-num{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:900;color:var(--o);line-height:1;margin-bottom:4px}
+.player-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--n);line-height:1.2;margin-bottom:4px}
+.player-pos{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.player-nat{font-size:12px;color:var(--muted);margin-top:2px}
+.no-players{text-align:center;padding:3rem;color:var(--muted);font-size:15px}
+.pos-section{margin-bottom:2rem}
+.pos-lbl{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--o);padding:6px 12px;background:var(--ol);border-radius:6px;display:inline-block;margin-bottom:12px}
+.sw{background:var(--w);border:1px solid var(--brd);border-radius:10px;overflow:hidden;margin-bottom:1.25rem}
+.sw-hdr{background:var(--n);padding:12px 16px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--w);display:flex;align-items:center;gap:8px}
+.sw-hdr::before{content:'';width:3px;height:14px;background:var(--o);border-radius:2px;flex-shrink:0}
+.sw-bd{padding:1rem}
+.stats-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sbox{background:var(--bg);border-radius:8px;padding:12px;text-align:center}
+.snum{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--n);line-height:1;margin-bottom:2px}
+.snum span{color:var(--o)}
+.slbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.catlist{list-style:none}
+.catlist li{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--brd);font-size:14px}
+.catlist li:last-child{border-bottom:none}
+.catlist a{color:var(--n);text-decoration:none;font-weight:500;cursor:pointer}
+.catlist a:hover{color:var(--o)}
+.ccnt{background:var(--ol);color:var(--o);font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px}
+.abt{text-align:center;padding:1.25rem}
+.abt img{width:60px;height:60px;object-fit:contain;margin:0 auto 12px;display:block}
+.abt p{font-size:13px;color:var(--muted);line-height:1.6}
+.login-w{min-height:calc(100vh - 71px);display:flex;align-items:center;justify-content:center;padding:2rem}
+.login-c{background:var(--w);border:1px solid var(--brd);border-radius:14px;padding:2.5rem;width:100%;max-width:400px}
+.login-c img{width:70px;height:70px;object-fit:contain;display:block;margin:0 auto 1.25rem}
+.login-ttl{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:var(--n);text-align:center;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:1.75rem}
+.fg{margin-bottom:1rem}
+.fl{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
+.fi{width:100%;padding:11px 14px;border:1.5px solid var(--brd);border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--n);background:#fafbfc}
+.fi:focus{outline:none;border-color:var(--o)}
+.login-btn{width:100%;background:var(--o);color:var(--w);border:none;padding:13px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:8px;cursor:pointer;margin-top:.5rem}
+.login-btn:hover{background:#cc540a}
+.lerr{background:#fff0f0;color:#c0392b;border:1px solid #f5c6c6;border-radius:6px;padding:10px 14px;font-size:13px;margin-bottom:1rem;display:none}
+.admin-w{max-width:980px;margin:2rem auto;padding:0 2rem 4rem}
+.adm-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.adm-h1{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--n)}
+.out-btn{background:none;border:1.5px solid var(--brd);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border-radius:6px;cursor:pointer}
+.out-btn:hover{border-color:#c0392b;color:#c0392b}
+.atabs{display:flex;gap:0;border-bottom:2px solid var(--brd);margin-bottom:1.5rem}
+.atab{padding:10px 20px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.atab.act{color:var(--o);border-bottom-color:var(--o)}
+.atab-pg{display:none}.atab-pg.act{display:block}
+.compose{background:var(--w);border:1px solid var(--brd);border-radius:12px;padding:1.75rem;margin-bottom:2rem}
+.compose-ttl{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--n);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.5px;padding-bottom:.75rem;border-bottom:1px solid var(--brd)}
+.compose-g{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.compose-g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem}
+.ci{width:100%;padding:10px 14px;border:1.5px solid var(--brd);border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--n)}
+.ci:focus{outline:none;border-color:var(--o)}
+.ci-lbl{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:5px}
+.cta{width:100%;padding:12px 14px;border:1.5px solid var(--brd);border-radius:8px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--n);resize:vertical;min-height:130px;line-height:1.6}
+.cta:focus{outline:none;border-color:var(--o)}
+.cftr{display:flex;justify-content:flex-end;gap:10px;margin-top:1rem}
+.clr-btn{background:none;border:1.5px solid var(--brd);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 20px;border-radius:6px;cursor:pointer}
+.pub-btn{background:var(--o);color:var(--w);border:none;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:10px 24px;border-radius:6px;cursor:pointer}
+.pub-btn:hover{background:#cc540a}
+.pub-btn:disabled{background:#bbb;cursor:not-allowed}
+.mng-ttl{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--n);margin-bottom:1rem;margin-top:1.5rem}
+.mrow{background:var(--w);border:1px solid var(--brd);border-radius:8px;padding:1rem 1.25rem;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.mttl{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--n);margin-bottom:2px}
+.mmeta{font-size:12px;color:var(--muted)}
+.del-btn{background:none;border:1.5px solid #f5c6c6;color:#c0392b;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.del-btn:hover{background:#fff0f0}
+.status-bar{font-size:13px;margin-top:.75rem;min-height:20px;text-align:right;font-weight:500}
+.status-bar.ok{color:#27ae60}.status-bar.err{color:#c0392b}
+.ftr{background:var(--n);color:rgba(255,255,255,.5);text-align:center;padding:1.5rem;font-size:13px;border-top:3px solid var(--o);margin-top:3rem}
+.ftr strong{color:var(--o)}
+select.ci{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A99' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+input[type=date].ci,input[type=time].ci{color:var(--n)}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-txt" id="loadingTxt">Veriler yükleniyor...</div>
+</div>
+
+<header class="hdr">
+  <div class="logo-a"><img id="hdrLogo" alt=""><div class="site-ttl">Rams Başakşehir<span>Resmi Blog</span></div></div>
+  <ul class="nav">
+    <li><a id="n-blog" class="act" onclick="showBlog()">Blog</a></li>
+    <li><a id="n-maclar" onclick="showMaclar()">Maçlar</a></li>
+    <li><a id="n-kadro" onclick="showKadro()">Kadro</a></li>
+  </ul>
+  <button class="adm-btn" id="admBtn" onclick="clickAdmin()">Admin Girişi</button>
+</header>
+
+<div class="pg act" id="pg-blog">
+  <div class="hero" id="hero" style="display:none">
+    <div class="hero-tag">Son Paylaşım</div>
+    <div class="hero-ttl" id="hTtl"></div>
+    <div class="hero-meta" id="hMeta"></div>
+  </div>
+  <div class="layout">
+    <main>
+      <div class="sec-lbl">Son Haberler</div>
+      <div class="pgrid" id="pgrid"><div class="no-posts">Yükleniyor...</div></div>
+    </main>
+    <aside>
+      <div class="sw"><div class="sw-hdr">İstatistikler</div><div class="sw-bd">
+        <div class="stats-g">
+          <div class="sbox"><div class="snum" id="stPosts">0</div><div class="slbl">Haber</div></div>
+          <div class="sbox"><div class="snum"><span id="stMaclar">0</span></div><div class="slbl">Maç</div></div>
+          <div class="sbox"><div class="snum" id="stKadro">0</div><div class="slbl">Oyuncu</div></div>
+          <div class="sbox"><div class="snum"><span id="stViews">0</span></div><div class="slbl">Görüntüleme</div></div>
+        </div>
+      </div></div>
+      <div class="sw"><div class="sw-hdr">Bölümler</div><div class="sw-bd">
+        <ul class="catlist">
+          <li><a onclick="showBlog()">Haberler</a><span class="ccnt" id="c0">0</span></li>
+          <li><a onclick="showMaclar()">Maçlar</a><span class="ccnt" id="c1">0</span></li>
+          <li><a onclick="showKadro()">Kadro</a><span class="ccnt" id="c2">0</span></li>
+        </ul>
+      </div></div>
+      <div class="sw"><div class="abt"><img id="sbLogo" alt=""><p>Rams Başakşehir resmi blog platformu.</p></div></div>
+    </aside>
+  </div>
+</div>
+
+<div class="pg" id="pg-maclar">
+  <div class="layout">
+    <main>
+      <div class="sec-lbl">Maçlar</div>
+      <div class="pgrid" id="macGrid"><div class="no-posts">Yükleniyor...</div></div>
+    </main>
+    <aside>
+      <div class="sw"><div class="sw-hdr">Maç İstatistikleri</div><div class="sw-bd">
+        <div class="stats-g"><div class="sbox"><div class="snum" id="macTotal">0</div><div class="slbl">Toplam Maç</div></div></div>
+      </div></div>
+      <div class="sw"><div class="abt"><img id="sbLogo2" alt=""><p>Maç raporları ve analizler.</p></div></div>
+    </aside>
+  </div>
+</div>
+
+<div class="pg" id="pg-single">
+  <div class="single-w">
+    <button class="back-btn" id="singleBack">← Geri Dön</button>
+    <div class="single-card"><div id="singleContent"></div></div>
+  </div>
+</div>
+
+<div class="pg" id="pg-kadro">
+  <div class="kadro-wrap">
+    <div class="sec-lbl" style="margin-bottom:1.5rem">Kadro</div>
+    <div id="kadroContent"><div class="no-players">Yükleniyor...</div></div>
+  </div>
+</div>
+
+<div class="pg" id="pg-login">
+  <div class="login-w"><div class="login-c">
+    <img id="loginLogo" alt="">
+    <div class="login-ttl">Admin Girişi</div>
+    <div class="login-sub">Rams Başakşehir Blog Yönetimi</div>
+    <div class="lerr" id="lerr">Kullanıcı adı veya şifre hatalı.</div>
+    <div class="fg"><label class="fl">Kullanıcı Adı</label><input class="fi" type="text" id="lu" placeholder="Kullanıcı adı" autocomplete="off"></div>
+    <div class="fg"><label class="fl">Şifre</label><input class="fi" type="password" id="lp" placeholder="••••••••"></div>
+    <button class="login-btn" onclick="doLogin()">Giriş Yap</button>
+  </div></div>
+</div>
+
+<div class="pg" id="pg-admin">
+  <div class="admin-w">
+    <div class="adm-hdr">
+      <div class="adm-h1">Yönetim Paneli</div>
+      <button class="out-btn" onclick="doLogout()">Çıkış Yap</button>
+    </div>
+    <div class="atabs">
+      <button class="atab act" onclick="switchTab('blog',this)">📰 Blog</button>
+      <button class="atab" onclick="switchTab('mac',this)">⚽ Maçlar</button>
+      <button class="atab" onclick="switchTab('kadro',this)">👕 Kadro</button>
+    </div>
+
+    <div class="atab-pg act" id="tab-blog">
+      <div class="compose">
+        <div class="compose-ttl">Yeni Blog Yazısı</div>
+        <div class="compose-g">
+          <div><label class="ci-lbl">Başlık</label><input class="ci" type="text" id="nTtl" placeholder="Başlık..."></div>
+          <div><label class="ci-lbl">Kategori</label>
+            <select class="ci" id="nCat">
+              <option>Maç Raporu</option><option>Transfer</option><option>Kadro Haberi</option><option>Duyuru</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="ci-lbl">İçerik</label><textarea class="cta" id="nBody" placeholder="İçerik yazınız..."></textarea></div>
+        <div class="cftr">
+          <button class="clr-btn" onclick="clearBlogForm()">Temizle</button>
+          <button class="pub-btn" id="pubBlogBtn" onclick="publishBlog()">Yayınla</button>
+        </div>
+        <div class="status-bar" id="blogSt"></div>
+      </div>
+      <div class="mng-ttl">Blog Yazıları</div>
+      <div id="mngBlog"></div>
+    </div>
+
+    <div class="atab-pg" id="tab-mac">
+      <div class="compose">
+        <div class="compose-ttl">Yeni Maç Girişi</div>
+        <div class="compose-g">
+          <div><label class="ci-lbl">Ev Sahibi Takım</label><input class="ci" type="text" id="mHome" placeholder="Ev sahibi..."></div>
+          <div><label class="ci-lbl">Deplasman Takım</label><input class="ci" type="text" id="mAway" placeholder="Deplasman..."></div>
+        </div>
+        <div class="compose-g">
+          <div><label class="ci-lbl">Ev Sahibi Logo URL</label><input class="ci" type="text" id="mHomeLogo" placeholder="https://..."></div>
+          <div><label class="ci-lbl">Deplasman Logo URL</label><input class="ci" type="text" id="mAwayLogo" placeholder="https://..."></div>
+        </div>
+        <div class="compose-g3">
+          <div><label class="ci-lbl">Tarih</label><input class="ci" type="date" id="mDate"></div>
+          <div><label class="ci-lbl">Saat</label><input class="ci" type="time" id="mTime"></div>
+          <div><label class="ci-lbl">Lig / Kupa</label><input class="ci" type="text" id="mLig" placeholder="Süper Lig"></div>
+        </div>
+        <div class="compose-g3">
+          <div><label class="ci-lbl">Stad</label><input class="ci" type="text" id="mStad" placeholder="Stad adı..."></div>
+          <div><label class="ci-lbl">Hakem</label><input class="ci" type="text" id="mHakem" placeholder="Hakem adı..."></div>
+          <div><label class="ci-lbl">Hava Durumu</label>
+            <select class="ci" id="mHava">
+              <option>☀️ Güneşli</option><option>⛅ Parçalı Bulutlu</option><option>🌧️ Yağmurlu</option><option>❄️ Karlı</option><option>🌬️ Rüzgarlı</option><option>🌫️ Sisli</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="ci-lbl">Maç Notu / Raporu</label><textarea class="cta" id="mBody" placeholder="Maç raporu, özet, analiz..."></textarea></div>
+        <div class="cftr">
+          <button class="clr-btn" onclick="clearMacForm()">Temizle</button>
+          <button class="pub-btn" id="pubMacBtn" onclick="publishMac()">Maçı Kaydet</button>
+        </div>
+        <div class="status-bar" id="macSt"></div>
+      </div>
+      <div class="mng-ttl">Kayıtlı Maçlar</div>
+      <div id="mngMac"></div>
+    </div>
+
+    <div class="atab-pg" id="tab-kadro">
+      <div class="compose">
+        <div class="compose-ttl">Oyuncu Ekle</div>
+        <div class="compose-g">
+          <div><label class="ci-lbl">Ad Soyad</label><input class="ci" type="text" id="pName" placeholder="Oyuncu adı..."></div>
+          <div><label class="ci-lbl">Forma No</label><input class="ci" type="number" id="pNum" placeholder="10" min="1" max="99"></div>
+        </div>
+        <div class="compose-g3">
+          <div><label class="ci-lbl">Pozisyon</label>
+            <select class="ci" id="pPos"><option>Kaleci</option><option>Defans</option><option>Orta Saha</option><option>Forvet</option></select>
+          </div>
+          <div><label class="ci-lbl">Uyruk</label><input class="ci" type="text" id="pNat" placeholder="Türkiye"></div>
+          <div><label class="ci-lbl">Yaş</label><input class="ci" type="number" id="pAge" placeholder="25"></div>
+        </div>
+        <div class="cftr">
+          <button class="clr-btn" onclick="clearKadroForm()">Temizle</button>
+          <button class="pub-btn" id="pubKadroBtn" onclick="publishOyuncu()">Kadroya Ekle</button>
+        </div>
+        <div class="status-bar" id="kadroSt"></div>
+      </div>
+      <div class="mng-ttl">Kadro Listesi</div>
+      <div id="mngKadro"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="ftr">© 2026 <strong>Rams Başakşehir</strong> — Resmi Blog Platformu</footer>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────
+const MASTER_KEY = '$2a$10$RqnAQYkw7ci6sKW4T4m5k.V7CWHAmy9u1q4f32w/lBxCWk7rg/216';
+const BASE = 'https://api.jsonbin.io/v3/b';
+// Bin ID'leri localStorage'da saklanır; ilk açılışta otomatik oluşturulur
+const LS_IDS = 'rams_bin_ids';
+
+const AU = 'rams_admin', AP = 'Basaksehir2026!';
+let loggedIn = false;
+let DB = { posts: [], macs: [], kadro: [] };
+let BIN = { posts: null, macs: null, kadro: null };
+
+// ── JSONBIN API ───────────────────────────────────────────
+async function apiCreate(name) {
+  const r = await fetch(BASE, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': MASTER_KEY,
+      'X-Bin-Name': name,
+      'X-Bin-Private': 'false'
+    },
+    body: JSON.stringify([])
+  });
+  if (!r.ok) {
+    const txt = await r.text();
+    throw new Error('Create failed: ' + r.status + ' ' + txt);
+  }
+  const d = await r.json();
+  return d.metadata.id;
+}
+
+async function apiRead(id) {
+  const r = await fetch(`${BASE}/${id}/latest`, {
+    headers: { 'X-Master-Key': MASTER_KEY }
+  });
+  if (!r.ok) throw new Error('Read failed: ' + r.status);
+  const d = await r.json();
+  return Array.isArray(d.record) ? d.record : [];
+}
+
+async function apiWrite(id, data) {
+  const r = await fetch(`${BASE}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': MASTER_KEY
+    },
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) {
+    const txt = await r.text();
+    throw new Error('Write failed: ' + r.status + ' ' + txt);
+  }
+  return true;
+}
+
+// ── INIT ─────────────────────────────────────────────────
+async function init() {
+  setLoading(true, 'Veriler yükleniyor...');
+  try {
+    // Bin ID'lerini localStorage'dan al veya yeni oluştur
+    let savedIds = null;
+    try { savedIds = JSON.parse(localStorage.getItem(LS_IDS)); } catch(e) {}
+
+    if (savedIds && savedIds.posts && savedIds.macs && savedIds.kadro) {
+      BIN = savedIds;
+    } else {
+      setLoading(true, 'İlk kurulum yapılıyor...');
+      BIN.posts = await apiCreate('rams-posts-' + Date.now());
+      BIN.macs  = await apiCreate('rams-macs-'  + Date.now());
+      BIN.kadro = await apiCreate('rams-kadro-' + Date.now());
+      localStorage.setItem(LS_IDS, JSON.stringify(BIN));
+    }
+
+    setLoading(true, 'İçerikler alınıyor...');
+    [DB.posts, DB.macs, DB.kadro] = await Promise.all([
+      apiRead(BIN.posts),
+      apiRead(BIN.macs),
+      apiRead(BIN.kadro)
+    ]);
+  } catch(e) {
+    console.error('Init error:', e);
+    setLoading(true, '⚠️ Bağlantı hatası: ' + e.message);
+    await new Promise(r => setTimeout(r, 3000));
+  }
+  setLoading(false);
+  renderBlog();
+  updateSidebar();
+}
+
+function setLoading(v, txt) {
+  const el = document.getElementById('loadingOverlay');
+  el.classList.toggle('hidden', !v);
+  if (txt) document.getElementById('loadingTxt').textContent = txt;
+}
+
+// ── NAV ───────────────────────────────────────────────────
+function setNav(id) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('act'));
+  document.getElementById('pg-' + id).classList.add('act');
+  document.querySelectorAll('.nav a').forEach(a => a.classList.remove('act'));
+  const el = document.getElementById('n-' + id);
+  if (el) el.classList.add('act');
+}
+function showBlog()   { renderBlog();   setNav('blog'); }
+function showMaclar() { renderMaclar(); setNav('maclar'); }
+function showKadro()  { renderKadro();  setNav('kadro'); }
+function clickAdmin() {
+  if (loggedIn) { setNav('admin'); renderAll(); }
+  else { setNav('login'); document.getElementById('lerr').style.display = 'none'; }
+}
+function switchTab(n, btn) {
+  document.querySelectorAll('.atab').forEach(t => t.classList.remove('act'));
+  document.querySelectorAll('.atab-pg').forEach(p => p.classList.remove('act'));
+  btn.classList.add('act');
+  document.getElementById('tab-' + n).classList.add('act');
+}
+
+function updateSidebar() {
+  document.getElementById('stPosts').textContent  = DB.posts.length;
+  document.getElementById('stMaclar').textContent = DB.macs.length;
+  document.getElementById('stKadro').textContent  = DB.kadro.length;
+  document.getElementById('stViews').textContent  = (DB.posts.length + DB.macs.length) * 47;
+  ['c0','c1','c2'].forEach((id, i) => {
+    document.getElementById(id).textContent = [DB.posts.length, DB.macs.length, DB.kadro.length][i];
+  });
+  const mt = document.getElementById('macTotal');
+  if (mt) mt.textContent = DB.macs.length;
+}
+
+// ── AUTH ─────────────────────────────────────────────────
+function doLogin() {
+  const u = document.getElementById('lu').value.trim();
+  const p = document.getElementById('lp').value;
+  if (u === AU && p === AP) {
+    loggedIn = true;
+    document.getElementById('admBtn').textContent = 'Panel';
+    setNav('admin'); renderAll();
+  } else {
+    document.getElementById('lerr').style.display = 'block';
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('pg-login').classList.contains('act')) doLogin();
+});
+function doLogout() {
+  loggedIn = false;
+  document.getElementById('admBtn').textContent = 'Admin Girişi';
+  showBlog();
+}
+
+// ── UTILS ─────────────────────────────────────────────────
+function fmtDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+function fmtMatchDate(ds) {
+  if (!ds) return '';
+  const p = ds.split('-');
+  const M = ['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  return p[2] + ' ' + M[parseInt(p[1])] + ' ' + p[0];
+}
+function setSt(id, msg, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg; el.className = 'status-bar ' + (cls || '');
+  if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = 'status-bar'; }, 3000);
+}
+function setBtn(id, loading) {
+  const b = document.getElementById(id); if (!b) return;
+  b.disabled = loading;
+  const labels = { pubBlogBtn: 'Yayınla', pubMacBtn: 'Maçı Kaydet', pubKadroBtn: 'Kadroya Ekle' };
+  b.textContent = loading ? 'Kaydediliyor...' : labels[id];
+}
+
+// ── BLOG ─────────────────────────────────────────────────
+function renderBlog() {
+  const posts = DB.posts;
+  const grid = document.getElementById('pgrid');
+  const hero = document.getElementById('hero');
+  updateSidebar();
+  if (!posts.length) { hero.style.display = 'none'; grid.innerHTML = '<div class="no-posts">Henüz paylaşım yok.</div>'; return; }
+  const last = posts[posts.length - 1];
+  hero.style.display = 'block';
+  document.getElementById('hTtl').textContent = last.title;
+  document.getElementById('hMeta').innerHTML = '<strong>Admin</strong> &nbsp;·&nbsp; ' + fmtDate(last.date) + ' &nbsp;·&nbsp; ' + last.category;
+  grid.innerHTML = '';
+  [...posts].reverse().forEach((post, i) => {
+    const exc = post.body.length > 160 ? post.body.substring(0, 160) + '...' : post.body;
+    const d = document.createElement('div');
+    d.className = 'card' + (i === 0 ? ' feat' : '');
+    d.innerHTML = `<div class="card-in"><div class="pcat">${post.category}</div><div class="pttl">${post.title}</div><div class="pexc">${exc}</div><div class="pftr"><span class="pdate">${fmtDate(post.date)}</span><button class="rdmore" onclick="openPost(${post.id})">Devamını Oku →</button></div></div>`;
+    grid.appendChild(d);
+  });
+}
+function openPost(id) {
+  const post = DB.posts.find(p => p.id === id); if (!post) return;
+  document.getElementById('singleBack').onclick = showBlog;
+  document.getElementById('singleContent').innerHTML = `<div style="padding:1.5rem"><div class="scat">${post.category}</div><div class="sttl">${post.title}</div><div class="smeta"><strong>Admin</strong> &nbsp;·&nbsp; ${fmtDate(post.date)}</div><div class="sbody">${post.body}</div></div>`;
+  setNav('single');
+}
+async function publishBlog() {
+  const t = document.getElementById('nTtl').value.trim();
+  const b = document.getElementById('nBody').value.trim();
+  const c = document.getElementById('nCat').value;
+  if (!t || !b) { alert('Başlık ve içerik boş olamaz.'); return; }
+  setBtn('pubBlogBtn', true);
+  const item = { id: Date.now(), title: t, category: c, body: b, date: new Date().toISOString() };
+  DB.posts.push(item);
+  try {
+    await apiWrite(BIN.posts, DB.posts);
+    clearBlogForm(); renderBlog(); renderMngBlog();
+    setSt('blogSt', '✓ Yayınlandı!', 'ok');
+  } catch(e) {
+    DB.posts.pop();
+    setSt('blogSt', '✗ Hata: ' + e.message, 'err');
+  }
+  setBtn('pubBlogBtn', false);
+}
+function clearBlogForm() { document.getElementById('nTtl').value = ''; document.getElementById('nBody').value = ''; document.getElementById('nCat').selectedIndex = 0; }
+async function deleteBlog(id) {
+  if (!confirm('Silinsin mi?')) return;
+  DB.posts = DB.posts.filter(p => p.id !== id);
+  await apiWrite(BIN.posts, DB.posts);
+  renderBlog(); renderMngBlog();
+}
+function renderMngBlog() {
+  const list = document.getElementById('mngBlog');
+  if (!DB.posts.length) { list.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:1rem 0">Henüz yazı yok.</div>'; return; }
+  list.innerHTML = '';
+  [...DB.posts].reverse().forEach(p => {
+    const r = document.createElement('div'); r.className = 'mrow';
+    r.innerHTML = `<div><div class="mttl">${p.title}</div><div class="mmeta">${p.category} · ${fmtDate(p.date)}</div></div><button class="del-btn" onclick="deleteBlog(${p.id})">Sil</button>`;
+    list.appendChild(r);
+  });
+}
+
+// ── MAÇLAR ───────────────────────────────────────────────
+function renderMaclar() {
+  const macs = DB.macs; const grid = document.getElementById('macGrid'); updateSidebar();
+  if (!macs.length) { grid.innerHTML = '<div class="no-posts">Henüz maç girişi yok.</div>'; return; }
+  grid.innerHTML = '';
+  [...macs].reverse().forEach(mac => {
+    const d = document.createElement('div'); d.className = 'match-card';
+    const hL = mac.homeLogo ? `<img class="team-logo-d" src="${mac.homeLogo}" alt="">` : `<div class="team-logo-ph">${mac.home.substring(0,2).toUpperCase()}</div>`;
+    const aL = mac.awayLogo ? `<img class="team-logo-d" src="${mac.awayLogo}" alt="">` : `<div class="team-logo-ph">${mac.away.substring(0,2).toUpperCase()}</div>`;
+    d.innerHTML = `<div class="match-scorebox"><div class="match-teams"><div class="team-col">${hL}<div class="team-name">${mac.home}</div></div><div class="vs-badge">VS</div><div class="team-col">${aL}<div class="team-name">${mac.away}</div></div></div><div class="match-info-bar">${mac.date?`<div class="mib">📅 ${fmtMatchDate(mac.date)}</div>`:''} ${mac.time?`<div class="mib">⏰ ${mac.time}</div>`:''} ${mac.stad?`<div class="mib">🏟️ ${mac.stad}</div>`:''} ${mac.hava?`<div class="mib">${mac.hava}</div>`:''}</div></div><div class="match-body">${mac.lig?`<div class="pcat" style="margin-bottom:8px">${mac.lig}</div>`:''} ${mac.body?`<div class="match-excerpt">${mac.body.substring(0,150)}${mac.body.length>150?'...':''}</div>`:''}<div class="match-ftr"><span class="pdate">${mac.hakem?'Hakem: '+mac.hakem:''}</span><button class="rdmore" onclick="openMac(${mac.id})">Detay →</button></div></div>`;
+    grid.appendChild(d);
+  });
+}
+function openMac(id) {
+  const mac = DB.macs.find(m => m.id === id); if (!mac) return;
+  const hL = mac.homeLogo ? `<img class="smatch-logo" src="${mac.homeLogo}" alt="">` : `<div class="smatch-logo-ph">${mac.home.substring(0,2).toUpperCase()}</div>`;
+  const aL = mac.awayLogo ? `<img class="smatch-logo" src="${mac.awayLogo}" alt="">` : `<div class="smatch-logo-ph">${mac.away.substring(0,2).toUpperCase()}</div>`;
+  document.getElementById('singleBack').onclick = showMaclar;
+  document.getElementById('singleContent').innerHTML = `<div class="smatch-header"><div class="smatch-teams"><div class="smatch-team">${hL}<div class="smatch-tname">${mac.home}</div></div><div class="smatch-vs">VS</div><div class="smatch-team">${aL}<div class="smatch-tname">${mac.away}</div></div></div><div class="smatch-infobar">${mac.date?`<div class="smib"><span style="font-size:18px">📅</span><span class="smib-lbl">Tarih</span><span class="smib-val">${fmtMatchDate(mac.date)}</span></div>`:''} ${mac.time?`<div class="smib"><span style="font-size:18px">⏰</span><span class="smib-lbl">Saat</span><span class="smib-val">${mac.time}</span></div>`:''} ${mac.stad?`<div class="smib"><span style="font-size:18px">🏟️</span><span class="smib-lbl">Stad</span><span class="smib-val">${mac.stad}</span></div>`:''} ${mac.hakem?`<div class="smib"><span style="font-size:18px">🟡</span><span class="smib-lbl">Hakem</span><span class="smib-val">${mac.hakem}</span></div>`:''} ${mac.hava?`<div class="smib"><span class="smib-lbl">Hava</span><span class="smib-val">${mac.hava}</span></div>`:''} ${mac.lig?`<div class="smib"><span style="font-size:18px">🏆</span><span class="smib-lbl">Lig/Kupa</span><span class="smib-val">${mac.lig}</span></div>`:''}</div></div><div class="smatch-content">${mac.body?`<div class="sbody">${mac.body}</div>`:'<div style="color:var(--muted);font-size:14px">Maç raporu henüz eklenmedi.</div>'}</div>`;
+  setNav('single');
+}
+async function publishMac() {
+  const home = document.getElementById('mHome').value.trim();
+  const away = document.getElementById('mAway').value.trim();
+  if (!home || !away) { alert('İki takım adı da zorunludur.'); return; }
+  setBtn('pubMacBtn', true);
+  const item = { id: Date.now(), home, away, homeLogo: document.getElementById('mHomeLogo').value.trim(), awayLogo: document.getElementById('mAwayLogo').value.trim(), date: document.getElementById('mDate').value, time: document.getElementById('mTime').value, lig: document.getElementById('mLig').value.trim(), stad: document.getElementById('mStad').value.trim(), hakem: document.getElementById('mHakem').value.trim(), hava: document.getElementById('mHava').value, body: document.getElementById('mBody').value.trim() };
+  DB.macs.push(item);
+  try {
+    await apiWrite(BIN.macs, DB.macs);
+    clearMacForm(); renderMngMac();
+    setSt('macSt', '✓ Maç kaydedildi!', 'ok');
+  } catch(e) {
+    DB.macs.pop();
+    setSt('macSt', '✗ Hata: ' + e.message, 'err');
+  }
+  setBtn('pubMacBtn', false);
+}
+function clearMacForm() { ['mHome','mAway','mHomeLogo','mAwayLogo','mDate','mTime','mLig','mStad','mHakem','mBody'].forEach(id => document.getElementById(id).value = ''); document.getElementById('mHava').selectedIndex = 0; }
+async function deleteMac(id) {
+  if (!confirm('Silinsin mi?')) return;
+  DB.macs = DB.macs.filter(m => m.id !== id);
+  await apiWrite(BIN.macs, DB.macs);
+  renderMaclar(); renderMngMac();
+}
+function renderMngMac() {
+  const list = document.getElementById('mngMac');
+  if (!DB.macs.length) { list.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:1rem 0">Henüz maç yok.</div>'; return; }
+  list.innerHTML = '';
+  [...DB.macs].reverse().forEach(m => {
+    const r = document.createElement('div'); r.className = 'mrow';
+    r.innerHTML = `<div><div class="mttl">${m.home} vs ${m.away}</div><div class="mmeta">${fmtMatchDate(m.date)||'Tarih girilmedi'}${m.lig?' · '+m.lig:''}</div></div><button class="del-btn" onclick="deleteMac(${m.id})">Sil</button>`;
+    list.appendChild(r);
+  });
+}
+
+// ── KADRO ────────────────────────────────────────────────
+function renderKadro() {
+  const kadro = DB.kadro; const wrap = document.getElementById('kadroContent'); updateSidebar();
+  if (!kadro.length) { wrap.innerHTML = '<div class="no-players">Henüz oyuncu eklenmedi.</div>'; return; }
+  const groups = { Kaleci: [], Defans: [], 'Orta Saha': [], Forvet: [] };
+  kadro.forEach(p => { (groups[p.pos] = groups[p.pos] || []).push(p); });
+  wrap.innerHTML = '';
+  Object.keys(groups).forEach(pos => {
+    if (!groups[pos].length) return;
+    const sec = document.createElement('div'); sec.className = 'pos-section';
+    sec.innerHTML = `<div class="pos-lbl">${pos}</div><div class="player-grid"></div>`;
+    wrap.appendChild(sec);
+    const pg = sec.querySelector('.player-grid');
+    groups[pos].sort((a,b) => a.num - b.num).forEach(p => {
+      const c = document.createElement('div'); c.className = 'player-card';
+      c.innerHTML = `<div class="player-num">${p.num||'—'}</div><div class="player-name">${p.name}</div><div class="player-pos">${p.pos}</div>${p.nat?`<div class="player-nat">🌍 ${p.nat}</div>`:''}${p.age?`<div class="player-nat">Yaş: ${p.age}</div>`:''}`;
+      pg.appendChild(c);
+    });
+  });
+}
+async function publishOyuncu() {
+  const name = document.getElementById('pName').value.trim();
+  if (!name) { alert('Oyuncu adı zorunludur.'); return; }
+  setBtn('pubKadroBtn', true);
+  const item = { id: Date.now(), name, num: document.getElementById('pNum').value, pos: document.getElementById('pPos').value, nat: document.getElementById('pNat').value.trim(), age: document.getElementById('pAge').value };
+  DB.kadro.push(item);
+  try {
+    await apiWrite(BIN.kadro, DB.kadro);
+    clearKadroForm(); renderKadro(); renderMngKadro();
+    setSt('kadroSt', '✓ Oyuncu eklendi!', 'ok');
+  } catch(e) {
+    DB.kadro.pop();
+    setSt('kadroSt', '✗ Hata: ' + e.message, 'err');
+  }
+  setBtn('pubKadroBtn', false);
+}
+function clearKadroForm() { ['pName','pNum','pNat','pAge'].forEach(id => document.getElementById(id).value = ''); document.getElementById('pPos').selectedIndex = 0; }
+async function deleteOyuncu(id) {
+  if (!confirm('Silinsin mi?')) return;
+  DB.kadro = DB.kadro.filter(p => p.id !== id);
+  await apiWrite(BIN.kadro, DB.kadro);
+  renderKadro(); renderMngKadro();
+}
+function renderMngKadro() {
+  const list = document.getElementById('mngKadro');
+  if (!DB.kadro.length) { list.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:1rem 0">Henüz oyuncu yok.</div>'; return; }
+  list.innerHTML = '';
+  DB.kadro.forEach(p => {
+    const r = document.createElement('div'); r.className = 'mrow';
+    r.innerHTML = `<div><div class="mttl">#${p.num||'?'} ${p.name}</div><div class="mmeta">${p.pos}${p.nat?' · '+p.nat:''}${p.age?' · '+p.age+' yaş':''}</div></div><button class="del-btn" onclick="deleteOyuncu(${p.id})">Sil</button>`;
+    list.appendChild(r);
+  });
+}
+
+function renderAll() { renderMngBlog(); renderMngMac(); renderMngKadro(); }
+
+// ── START ─────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+  const src = 'data:image/png;base64,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';
+  ['hdrLogo','sbLogo','sbLogo2','loginLogo'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.src = src;
+  });
+  init();
+});
+</script>
+</body>
+</html>
